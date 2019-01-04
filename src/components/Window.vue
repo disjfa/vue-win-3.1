@@ -1,0 +1,151 @@
+<template>
+  <div class="position-absolute window d-flex flex-column" :class="activeClass()">
+    <div class="window-inner">
+      <div class="d-flex window-header">
+        <div class="dropdown">
+          <a href="#" class="btn btn-menu" @dblclick="removeProgram" @click="openDropdown">
+            <i class="fa fa-fw fa-minus"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" :class="isDropdownOpen">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+        <div class="col text-center window-title">{{ currentProgram.title }}</div>
+        <a href="#" class="btn btn-default">
+          <i class="fa fa-fw fa-caret-down"></i>
+        </a>
+        <a href="#" class="btn btn-default">
+          <i class="fa fa-fw fa-caret-up"></i>
+        </a>
+      </div>
+      <div class="p-3 window-content">
+        <slot></slot>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import interact from 'interactjs';
+
+export default {
+  name: 'Window',
+  data() {
+    return {
+      dropdownOpen: false,
+    };
+  },
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  mounted() {
+    this.$el.addEventListener('click', this.activateCurrentProgram);
+
+    if (this.currentProgram.x && this.currentProgram.y) {
+      this.setPosition(this.$el,
+        this.currentProgram.x,
+        this.currentProgram.y,
+        this.currentProgram.width,
+        this.currentProgram.height);
+    }
+    interact(this.$el)
+      .draggable({
+        allowFrom: '.window-title',
+        inertia: true,
+        restrict: {
+          restriction: '#app',
+          endOnly: true,
+          elementRect: {
+            top: 0,
+            left: 0,
+            bottom: 1,
+            right: 1,
+          },
+        },
+        onmove: this.dragMoveListener,
+      })
+      .resizable({
+        inertia: true,
+        edges: {
+          left: true,
+          right: true,
+          bottom: true,
+          top: true,
+        },
+        restrictSize: {
+          min: {
+            width: 250,
+            height: 150,
+          },
+        },
+      })
+      .on('resizemove', this.resizeMoveListener);
+  },
+  computed: {
+    isDropdownOpen() {
+      return this.dropdownOpen ? 'show' : false;
+    },
+    currentProgram() {
+      return this.$store.state.activePrograms.find(activeProgram => activeProgram._id === this.id);
+    },
+  },
+  methods: {
+    openDropdown() {
+      this.dropdownOpen = !this.dropdownOpen;
+    },
+    removeProgram() {
+      this.$store.commit('removeProgram', this.currentProgram._id);
+    },
+    activateCurrentProgram() {
+      const { _id, active } = this.currentProgram;
+      if (active !== true) {
+        this.$store.commit('activateCurrentProgram', _id);
+      }
+    },
+    activeClass() {
+      const { active } = this.currentProgram;
+      return active === true ? 'window-active' : '';
+    },
+    dragMoveListener(event) {
+      const { target } = event;
+      const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+      const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+      this.setPosition(target, x, y);
+    },
+    resizeMoveListener(event) {
+      const { target } = event;
+      const { width, height } = event.rect;
+      let x = (parseFloat(target.getAttribute('data-x')) || 0);
+      let y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+      x += event.deltaRect.left;
+      y += event.deltaRect.top;
+      this.setPosition(target, x, y, width, height);
+    },
+    setPosition(target, x, y, width, height) {
+      target.style.transform = `translate(${x}px, ${y}px)`;
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
+      if (width) {
+        target.style.width = `${width}px`;
+      }
+      if (height) {
+        target.style.height = `${height}px`;
+      }
+
+      this.$store.commit('setWindowSize', {
+        id: this.id,
+        x,
+        y,
+        width,
+        height,
+      });
+    },
+  },
+};
+</script>

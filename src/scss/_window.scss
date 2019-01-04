@@ -1,0 +1,44 @@
+.window {
+  z-index: 99;
+  align-items: stretch;
+  background: $secondary;
+  border: 1px solid $dark;
+  display: flex;
+  min-width: 250px;
+  overflow: hidden;
+  padding: 3px;
+
+  &-inner {
+    background: $white;
+    border: 1px solid $dark;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 145px;
+  }
+
+  &-header {
+    background: $secondary;
+    border-bottom: 1px solid $dark;
+    color: $dark;
+    line-height: 1.5;
+  }
+
+  &-title {
+    font-weight: bold;
+    padding-top: 0.2rem;
+  }
+
+  &-content {
+    flex: 1;
+    overflow: auto;
+  }
+}
+
+.window-active {
+  z-index: 100;
+  .window-header {
+    background: $primary;
+    color: $white;
+  }
+}

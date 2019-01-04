@@ -1,0 +1,16 @@
+.btn-default {
+  @include button-variant($secondary, $secondary);
+  border-color: $white $dark $dark $white;
+  @include hover {
+    border-color: $dark $white $white $dark;
+  }
+}
+
+.btn-menu {
+  @include button-variant($secondary, $secondary);
+  border-color: $white $dark $dark $white;
+  color: $light;
+  @include hover {
+    color: darken($light, 10%);
+  }
+}
