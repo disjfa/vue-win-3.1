@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "vue-cli-service build",
-    "deploy": "NODE_DEBUG=gh-pages gh-pages -d dist",
+    "deploy": "npm run build && gh-pages gh-pages -d dist",
     "lint": "vue-cli-service lint",
     "serve": "vue-cli-service serve --host 192.168.33.99"
   },

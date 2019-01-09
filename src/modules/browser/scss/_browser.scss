@@ -1,0 +1,9 @@
+.browser {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+
+  &-frame {
+    flex: 1;
+  }
+}

@@ -4,6 +4,7 @@ import PouchDB from 'pouchdb-browser';
 import { v4 } from 'uuid';
 import About from './components/About.vue';
 import TaskList from './components/TaskList.vue';
+import browserStore from './modules/browser/store';
 
 const activeProgramDb = new PouchDB('activePrograms');
 Vue.use(Vuex);
@@ -31,16 +32,21 @@ function setPositions(program, data) {
 }
 
 export default new Vuex.Store({
+  modules: {
+    browserStore,
+  },
   state: {
     programs: [
       {
         name: 'about',
         title: 'About',
+        icon: 'fa fa-question-circle',
         component: About,
       },
       {
         name: 'task-list',
         title: 'Task list',
+        icon: 'fa fa-tasks',
         component: TaskList,
       },
     ],
@@ -60,7 +66,7 @@ export default new Vuex.Store({
     activateCurrentProgram(state, programId) {
       const { activePrograms } = state;
       activePrograms.map((activeProgram) => {
-        Vue.set(activeProgram, 'active', activeProgram._id === programId)
+        Vue.set(activeProgram, 'active', activeProgram._id === programId);
       });
     },
     activateProgram(state, row) {
@@ -79,9 +85,14 @@ export default new Vuex.Store({
           activeProgramDb.put(program);
         });
     },
+    addProgram(state, payload) {
+      const {programs} = state;
+      programs.push(payload);
+      Vue.set(state, 'programs', programs);
+    },
   },
   actions: {
-    addProgram(context, payload) {
+    activateProgram(context, payload) {
       const { name } = payload;
       const { programs } = context.state;
       const program = programs.find(p => p.name === name);
@@ -104,7 +115,6 @@ export default new Vuex.Store({
           store.commit('activateProgram', row);
         });
       });
-
     },
   },
 });

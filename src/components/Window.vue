@@ -35,6 +35,7 @@ export default {
   data() {
     return {
       dropdownOpen: false,
+      timer: false,
     };
   },
   props: {
@@ -58,7 +59,6 @@ export default {
         allowFrom: '.window-title',
         inertia: true,
         restrict: {
-          restriction: '#app',
           endOnly: true,
           elementRect: {
             top: 0,
@@ -67,6 +67,7 @@ export default {
             right: 1,
           },
         },
+        autoScroll: true,
         onmove: this.dragMoveListener,
       })
       .resizable({
@@ -137,14 +138,18 @@ export default {
       if (height) {
         target.style.height = `${height}px`;
       }
-
-      this.$store.commit('setWindowSize', {
-        id: this.id,
-        x,
-        y,
-        width,
-        height,
-      });
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+      this.timer = setTimeout(() => {
+        this.$store.commit('setWindowSize', {
+          id: this.id,
+          x,
+          y,
+          width,
+          height,
+        });
+      }, 500);
     },
   },
 };

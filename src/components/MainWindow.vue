@@ -1,11 +1,18 @@
 <template>
   <div>
-    <div class="p-3 position-absolute">
-      <div v-for="program in programs" :key="program.name">
-        <a href="#" @click="activateProgram(program)">
-          {{ program.title }}
-        </a>
-      </div>
+    <div class="p-3 desktop">
+      <a
+        v-for="program in programs"
+        :key="program.name"
+        href="#"
+        @dblclick="activateProgram(program)"
+        class="desktop-program"
+      >
+        <div>
+          <i class="fa-2x" :class="program.icon"></i>
+        </div>
+        {{ program.title }}
+      </a>
     </div>
     <window
       v-for="program in activePrograms"
@@ -42,7 +49,7 @@ export default {
       return program.component;
     },
     activateProgram(program) {
-      this.$store.dispatch('addProgram', program);
+      this.$store.dispatch('activateProgram', program);
     },
   },
 };
