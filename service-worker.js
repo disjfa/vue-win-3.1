@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/vue-win-3.1/precache-manifest.90b32474c5092ec6485c8a40c1940619.js"
+  "/vue-win-3.1/precache-manifest.8ee7e499462be163dce08ef7057f2fff.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "win3.1"});
