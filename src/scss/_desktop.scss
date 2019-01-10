@@ -5,7 +5,10 @@
   position: fixed;
   right: 0;
   top: 0;
-  display: flex;
+
+  &-programs {
+    display: flex;
+  }
 
   &-program {
     color: $dark;

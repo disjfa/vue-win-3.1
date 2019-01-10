@@ -7,9 +7,14 @@
             <i class="fa fa-fw fa-minus"></i>
           </a>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" :class="isDropdownOpen">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item disabled" href="#">Move</a>
+            <a class="dropdown-item disabled" href="#">Size</a>
+            <a class="dropdown-item disabled" href="#">Minimize</a>
+            <a class="dropdown-item disabled" href="#">Maximize</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" @click="removeProgram">Close</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#" @click="switchTo">Switch to</a>
           </div>
         </div>
         <div class="col text-center window-title">{{ currentProgram.title }}</div>
@@ -20,7 +25,7 @@
           <i class="fa fa-fw fa-caret-up"></i>
         </a>
       </div>
-      <div class="p-3 window-content">
+      <div class="window-content">
         <slot></slot>
       </div>
     </div>
@@ -96,6 +101,11 @@ export default {
     },
   },
   methods: {
+    switchTo() {
+      const program = this.$store.state.programs.find(p => p.name === 'task-list');
+      this.$store.dispatch('activateProgram', program);
+      this.dropdownOpen = false;
+    },
     openDropdown() {
       this.dropdownOpen = !this.dropdownOpen;
     },

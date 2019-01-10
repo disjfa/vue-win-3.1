@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-3">
     <div class="form-group">
       <select
         name="task-list"

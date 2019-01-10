@@ -1,18 +1,30 @@
 <template>
   <div>
     <div class="p-3 desktop">
-      <a
-        v-for="program in programs"
-        :key="program.name"
-        href="#"
-        @dblclick="activateProgram(program)"
-        class="desktop-program"
-      >
-        <div>
-          <i class="fa-2x" :class="program.icon"></i>
-        </div>
-        {{ program.title }}
-      </a>
+      <h1>Win 3.1 testcase using vue!</h1>
+      <p>
+        Hello there. This is a ux textcase, please feel free to click around, double click a program
+        and have fun!
+      </p>
+      <p>
+        Please note that this is very alpha and will probably never go anywhere. That said we can
+        have fun with the code.
+      </p>
+      <hr>
+      <div class="desktop-programs">
+        <a
+          v-for="program in programs"
+          :key="program.name"
+          href="#"
+          @dblclick="activateProgram(program)"
+          class="desktop-program"
+        >
+          <div>
+            <i class="fa-2x" :class="program.icon"></i>
+          </div>
+          {{ program.title }}
+        </a>
+      </div>
     </div>
     <window
       v-for="program in activePrograms"

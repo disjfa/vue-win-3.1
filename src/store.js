@@ -71,7 +71,9 @@ export default new Vuex.Store({
     },
     activateProgram(state, row) {
       const { activePrograms } = state;
-
+      if (activePrograms.find(p => p._id === row.id)) {
+        return;
+      }
       activeProgramDb.get(row.id)
         .then((newProgram) => {
           activePrograms.push(newProgram);
@@ -86,9 +88,13 @@ export default new Vuex.Store({
         });
     },
     addProgram(state, payload) {
-      const {programs} = state;
-      programs.push(payload);
-      Vue.set(state, 'programs', programs);
+      const { programs } = state;
+      const filterPrograms = programs.filter((p) => {
+        return p.name !== payload.name;
+      });
+
+      filterPrograms.push(payload);
+      Vue.set(state, 'programs', filterPrograms);
     },
   },
   actions: {
@@ -101,6 +107,9 @@ export default new Vuex.Store({
       delete newProgram.component;
       activeProgramDb.put(newProgram, (err, result) => {
         context.commit('activateProgram', result);
+        setTimeout(() => {
+          context.commit('activateCurrentProgram', result.id);
+        }, 50);
       });
     },
     initialize(store) {

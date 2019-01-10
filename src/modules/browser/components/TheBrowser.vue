@@ -14,7 +14,10 @@
         </button>
       </div>
     </div>
-    <iframe :src="getMainurl()" frameborder="0" class="browser-frame" @load="checkUrl" ref="iframe"></iframe>
+    <iframe v-if="mainurl" :src="getMainurl()" frameborder="0" class="browser-frame" @load="checkUrl" ref="iframe"></iframe>
+    <div v-if="!mainurl" class="p-3 bg-light browser-frame">
+      Welcome to the browser. It tries to load content using https, but it sometimes wont work.
+    </div>
   </div>
 </template>
 
